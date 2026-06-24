@@ -1,5 +1,5 @@
 /**
- * ForceKit v2 — Public API
+ * ForceKit — Public API
  *
  * Main entry point for consumers importing forcekit as a library.
  */

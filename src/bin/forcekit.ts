@@ -23,7 +23,7 @@ import { OrchestratorController } from '../core/orchestrator.js';
 // ─── CLI Definition ─────────────────────────────────────────────
 
 const USAGE = `
-ForceKit v2 — AI Agent Framework for Salesforce
+ForceKit — AI Agent Framework for Salesforce
 
 Usage:
   forcekit <command> [options]
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
   }
 
   if (args[0] === 'version' || args[0] === '--version') {
-    console.log('ForceKit v2.0.0-alpha.1');
+    console.log('ForceKit 2.0.0-alpha.1');
     process.exit(0);
   }
 

@@ -388,7 +388,7 @@ export class ForceKitState {
     };
 
     let md = `# Current State\n\n`;
-    md += `> 🤖 **AUTO-GENERATED** from ForceKit v2 state. Do not edit directly.\n\n---\n\n`;
+    md += `> 🤖 **AUTO-GENERATED** from ForceKit state. Do not edit directly.\n\n---\n\n`;
     md += `## Project Status\n\n`;
     md += `**Last Updated:** ${this.data.lastUpdated.split('T')[0]}\n`;
     md += `**Overall Status:** ${statusEmoji[this.data.projectStatus] ?? this.data.projectStatus}\n\n---\n\n`;
@@ -516,7 +516,7 @@ export class ForceKitState {
   /** Render inventory to markdown */
   renderInventoryMarkdown(): string {
     let md = `# Metadata Inventory\n\n`;
-    md += `> 🤖 **AUTO-GENERATED** from ForceKit v2 state.\n\n---\n\n`;
+    md += `> 🤖 **AUTO-GENERATED** from ForceKit state.\n\n---\n\n`;
 
     const { objects, classes, lwcComponents, flows, triggers, permissionSets } = this.data.inventory;
 
