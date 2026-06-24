@@ -1,0 +1,56 @@
+name: developer
+version: "1.0"
+description: "Implements a single, well-bounded Salesforce component following ForceKit conventions and architecture patterns"
+
+capabilities:
+  - code_generation
+  - file_modification
+  - test_execution
+
+context:
+  required:
+    - rules.md
+    - conventions.md
+    - inventory.md
+  optional:
+    - source-of-truth.md
+    - architecture.md
+    - prompts/apex.md
+    - prompts/lwc.md
+    - prompts/smart-design.md
+
+tools:
+  - scan
+  - lint
+
+constraints:
+  maxFiles: 10
+  allowedPaths:
+    - "force-app/main/default/classes/"
+    - "force-app/main/default/lwc/"
+    - "force-app/main/default/triggers/"
+  requireTests: true
+  requireVerification: true
+  minTestCoverage: 90
+
+lifecycle:
+  onStart:
+    - load_context
+    - verify_inventory
+    - log_session_start
+  onComplete:
+    - run_linter
+    - run_tests
+    - update_inventory
+    - log_session_end
+  onError:
+    - log_blocker
+    - notify_orchestrator
+
+qualityGates:
+  - name: static-analysis-clean
+    required: true
+  - name: inventory-coverage
+    required: true
+  - name: no-active-blockers
+    required: true

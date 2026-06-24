@@ -1,0 +1,40 @@
+name: reviewer
+version: "1.0"
+description: "Performs code review, CRUD/FLS validation, sharing model checks, and static analysis on Salesforce code changes"
+
+capabilities:
+  - code_review
+  - security_review
+  - static_analysis
+
+context:
+  required:
+    - rules.md
+    - conventions.md
+    - governance.md
+  optional:
+    - source-of-truth.md
+    - prompts/security.md
+    - prompts/smart-design.md
+
+tools:
+  - lint
+  - scan
+
+constraints:
+  maxFiles: 0
+  requireTests: false
+  requireVerification: true
+
+lifecycle:
+  onStart:
+    - load_context
+    - log_session_start
+  onComplete:
+    - log_session_end
+  onError:
+    - log_blocker
+
+qualityGates:
+  - name: static-analysis-clean
+    required: true

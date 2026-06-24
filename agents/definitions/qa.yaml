@@ -1,0 +1,46 @@
+name: qa
+version: "1.0"
+description: "Runs unit tests, validates org schemas, verifies test coverage, and performs database validation for Salesforce projects"
+
+capabilities:
+  - test_execution
+  - static_analysis
+
+context:
+  required:
+    - rules.md
+    - conventions.md
+    - quality-gates.md
+  optional:
+    - prompts/testing.md
+    - source-of-truth.md
+
+tools:
+  - lint
+  - scan
+
+constraints:
+  maxFiles: 5
+  allowedPaths:
+    - "force-app/main/default/classes/*Test*"
+  requireTests: false
+  requireVerification: true
+  minTestCoverage: 90
+
+lifecycle:
+  onStart:
+    - load_context
+    - verify_inventory
+    - log_session_start
+  onComplete:
+    - run_tests
+    - log_session_end
+  onError:
+    - log_blocker
+    - notify_orchestrator
+
+qualityGates:
+  - name: static-analysis-clean
+    required: true
+  - name: inventory-coverage
+    required: false

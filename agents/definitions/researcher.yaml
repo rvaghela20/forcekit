@@ -1,0 +1,43 @@
+name: researcher
+version: "1.0"
+description: "Searches documentation and release notes for Salesforce platform changes and best practices"
+
+capabilities:
+  - doc_lookup
+  - web_search
+  - file_modification
+
+context:
+  required:
+    - conventions.md
+    - architecture.md
+    - governance.md
+  optional:
+    - source-of-truth.md
+    - prompts/orchestration.md
+    - prompts/learning.md
+
+tools:
+  - scan
+  - web-search
+
+constraints:
+  maxFiles: 5
+  allowedPaths:
+    - "forcekit/"
+  requireTests: false
+  requireVerification: false
+
+lifecycle:
+  onStart:
+    - load_context
+    - log_session_start
+  onComplete:
+    - update_docs
+    - log_session_end
+  onError:
+    - log_blocker
+
+qualityGates:
+  - name: session-documented
+    required: true
