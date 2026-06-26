@@ -60,24 +60,26 @@ export class Scanner {
 
   /** Apply scan results to the state manager */
   applyToState(state: ForceKitState, result: ScanResult): void {
-    for (const item of result.objects) {
-      state.registerMetadata('objects', item);
-    }
-    for (const item of result.classes) {
-      state.registerMetadata('classes', item);
-    }
-    for (const item of result.lwcComponents) {
-      state.registerMetadata('lwcComponents', item);
-    }
-    for (const item of result.flows) {
-      state.registerMetadata('flows', item);
-    }
-    for (const item of result.triggers) {
-      state.registerMetadata('triggers', item);
-    }
-    for (const item of result.permissionSets) {
-      state.registerMetadata('permissionSets', item);
-    }
+    state.batch(() => {
+      for (const item of result.objects) {
+        state.registerMetadata('objects', item);
+      }
+      for (const item of result.classes) {
+        state.registerMetadata('classes', item);
+      }
+      for (const item of result.lwcComponents) {
+        state.registerMetadata('lwcComponents', item);
+      }
+      for (const item of result.flows) {
+        state.registerMetadata('flows', item);
+      }
+      for (const item of result.triggers) {
+        state.registerMetadata('triggers', item);
+      }
+      for (const item of result.permissionSets) {
+        state.registerMetadata('permissionSets', item);
+      }
+    });
   }
 
   // ─── Individual Scanners ──────────────────────────────────────

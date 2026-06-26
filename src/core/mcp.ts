@@ -8,6 +8,7 @@
 import readline from 'node:readline';
 import type { AgentEngine } from './engine.js';
 import type { ToolInput } from './registry.js';
+import { VERSION } from '../version.js';
 
 /**
  * Starts the MCP stdio server using the given AgentEngine instance.
@@ -59,7 +60,7 @@ async function handleMessage(message: any, engine: AgentEngine, projectRoot: str
             },
             serverInfo: {
               name: 'forcekit-mcp',
-              version: '2.0.0',
+              version: VERSION,
             },
           },
         });

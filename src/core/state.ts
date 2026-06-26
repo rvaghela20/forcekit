@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, renameSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { EventBus } from './events.js';
+import { VERSION } from '../version.js';
 
 // ─── State Types ────────────────────────────────────────────────
 
@@ -101,7 +102,7 @@ export interface ForceKitStateData {
 
 function createDefaultState(): ForceKitStateData {
   return {
-    version: '2.0.0',
+    version: VERSION,
     projectStatus: 'on_track',
     lastUpdated: new Date().toISOString(),
     sessions: [],
@@ -132,6 +133,8 @@ export class ForceKitState {
   private data: ForceKitStateData;
   private statePath: string;
   private events?: EventBus;
+  private inTransaction = false;
+  private cachedSnapshot: ForceKitStateData | null = null;
 
   constructor(projectRoot: string, events?: EventBus) {
     this.statePath = join(projectRoot, '.forcekit', 'state.json');
@@ -154,7 +157,23 @@ export class ForceKitState {
     return createDefaultState();
   }
 
+  /** Execute multiple mutations in a batch, saving to disk only once at the end */
+  batch(operations: () => void): void {
+    const wasInTransaction = this.inTransaction;
+    this.inTransaction = true;
+    try {
+      operations();
+    } finally {
+      this.inTransaction = wasInTransaction;
+      if (!this.inTransaction) {
+        this.save();
+      }
+    }
+  }
+
   save(): void {
+    this.cachedSnapshot = null;
+    if (this.inTransaction) return;
     this.data.lastUpdated = new Date().toISOString();
     const dir = dirname(this.statePath);
     if (!existsSync(dir)) {
@@ -171,7 +190,10 @@ export class ForceKitState {
 
   /** Get a read-only snapshot of the full state */
   getSnapshot(): Readonly<ForceKitStateData> {
-    return structuredClone(this.data);
+    if (!this.cachedSnapshot) {
+      this.cachedSnapshot = structuredClone(this.data);
+    }
+    return this.cachedSnapshot;
   }
 
   // ─── Sessions ───────────────────────────────────────────────

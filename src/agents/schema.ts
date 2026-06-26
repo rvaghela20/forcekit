@@ -132,7 +132,7 @@ export const AGENT_DEFINITION_SCHEMA = {
     constraints: {
       type: 'object' as const,
       properties: {
-        maxFiles: { type: 'number' as const, minimum: 1 },
+        maxFiles: { type: 'number' as const, minimum: 0 },
         allowedPaths: { type: 'array' as const, items: { type: 'string' as const } },
         forbiddenPaths: { type: 'array' as const, items: { type: 'string' as const } },
         requireTests: { type: 'boolean' as const },

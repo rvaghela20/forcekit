@@ -14,6 +14,23 @@ ForceKit is a programmatic AI Agent Framework designed for Salesforce developmen
 
 ---
 
+## Project Status
+
+ForceKit `v2.0.0-beta.1` — the following table describes the maturity of each major feature area:
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| CLI (scan, lint, verify, deploy, test) | ✅ Production-ready | Wraps `sf` CLI with full JSON output support |
+| MCP Server Integration | ✅ Production-ready | Tested with Claude Desktop and Cursor |
+| Agent Definitions (YAML) | ✅ Production-ready | 5 built-in agents, AJV-validated schema |
+| State Management & Markdown Rendering | ✅ Production-ready | Atomic writes, structured JSON, backward-compatible |
+| Static Analysis (Linter) | ✅ Production-ready | 12 built-in rules, plugin-extensible |
+| Plugin System | 🧪 Experimental | API stable, 3 built-in plugins |
+| Orchestrator Multi-Agent Loop | 🧪 Experimental | Sequential task delegation, quality gates |
+| Web Search Tool | 🧪 Curated reference DB | 27+ Salesforce doc entries, offline-capable |
+
+> **Legend:** ✅ = Stable and tested for production Salesforce projects &nbsp;|&nbsp; 🧪 = Functional but under active development
+
 ## Directory Structure
 
 ```text
@@ -68,12 +85,32 @@ ForceKit integrates with your favorite AI coding tools in two primary ways: **Mo
 
 ### 1. Installation
 
-Install dependencies and build the TypeScript codebase:
+You can install ForceKit globally or locally via npm, or build it from source.
+
+#### Global CLI Installation
+```bash
+npm install -g @rvaghela-09/forcekit
+```
+Verify the installation:
+```bash
+forcekit help
+```
+
+#### Local Project Dependency
+```bash
+npm install --save-dev @rvaghela-09/forcekit
+```
+Verify the local installation:
+```bash
+npx forcekit help
+```
+
+#### Build From Source
+Clone the repository, install dependencies, and build the TypeScript codebase:
 ```bash
 npm install
 npm run build
 ```
-
 Verify that the CLI is correctly installed:
 ```bash
 node dist/bin/forcekit.js --help
@@ -114,43 +151,43 @@ Run commands by providing the target Salesforce project root via `--project-root
 ### 1. Scan Project
 Catalog all Salesforce metadata (Apex, LWC, Flows, Triggers) into the local inventory state:
 ```bash
-node dist/bin/forcekit.js scan --project-root /path/to/sf-project
+forcekit scan --project-root /path/to/sf-project
 ```
 
 ### 2. Lint Code
 Run static analysis checks on your Apex classes, triggers, and LWC files:
 ```bash
-node dist/bin/forcekit.js lint --project-root /path/to/sf-project
+forcekit lint --project-root /path/to/sf-project
 ```
 
 ### 3. Sync Salesforce Org & Limits
 Query active org status, Daily API limits, Data Storage, and File Storage usage:
 ```bash
-node dist/bin/forcekit.js org sync --project-root /path/to/sf-project
+forcekit org sync --project-root /path/to/sf-project
 ```
 
 ### 4. Verify Metadata
 Check if custom objects, fields, classes, or flows exist on the active org:
 ```bash
-node dist/bin/forcekit.js verify --type field --name Active__c --object Account --project-root /path/to/sf-project
+forcekit verify --type field --name Active__c --object Account --project-root /path/to/sf-project
 ```
 
 ### 5. Deploy Metadata
 Deploy target source directories or files to the active org:
 ```bash
-node dist/bin/forcekit.js deploy --source-dir force-app/main/default/classes/AccountService.cls --project-root /path/to/sf-project
+forcekit deploy --source-dir force-app/main/default/classes/AccountService.cls --project-root /path/to/sf-project
 ```
 
 ### 6. Run Unit Tests
 Execute target Apex unit tests and verify code coverage:
 ```bash
-node dist/bin/forcekit.js test --tests AccountServiceTest --project-root /path/to/sf-project
+forcekit test --tests AccountServiceTest --project-root /path/to/sf-project
 ```
 
 ### 7. Run Lead Orchestrator
 Execute the complete, multi-agent task loop (Research → Dev → Review → QA) to achieve a high-level goal:
 ```bash
-node dist/bin/forcekit.js run-orchestrator --goal "Create Lead trigger assigning default owner" --project-root /path/to/sf-project
+forcekit run-orchestrator --goal "Create Lead trigger assigning default owner" --project-root /path/to/sf-project
 ```
 
 ---
@@ -194,7 +231,7 @@ Once configured, the following tools will be discoverable:
 
 ## Verification & Testing
 
-ForceKit contains a suite of 67 sandbox-independent unit tests. Run them using:
+ForceKit contains a suite of sandbox-independent unit tests. Run them using:
 ```bash
 npm test
 ```

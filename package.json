@@ -1,16 +1,18 @@
 {
-  "name": "forcekit",
-  "version": "2.0.0-alpha.1",
+  "name": "@rvaghela-09/forcekit",
+  "version": "2.0.0-beta.1",
   "description": "AI Agent Framework for Salesforce — programmatic context, tools, plugins, and agent lifecycle management.",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "forcekit": "./dist/bin/forcekit.js"
+    "forcekit": "dist/bin/forcekit.js"
   },
   "files": [
     "dist/",
+    "!dist/tests/",
+    "!dist/**/*.map",
     "agents/definitions/",
     "README.md"
   ],

@@ -21,11 +21,18 @@ context:
 tools:
   - scan
   - lint
+  - web-search
+  - test
+  - verify
+  - deploy
 
 constraints:
-  maxFiles: 3
+  maxFiles: 20
   allowedPaths:
     - "forcekit/"
+    - "force-app/main/default/classes/"
+    - "force-app/main/default/lwc/"
+    - "force-app/main/default/triggers/"
   requireTests: false
   requireVerification: true
 

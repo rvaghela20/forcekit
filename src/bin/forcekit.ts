@@ -7,7 +7,7 @@
  * Replaces both install.js and update_state.py with a single TypeScript CLI.
  */
 
-import { parseArgs } from 'node:util';
+import { VERSION } from '../version.js';
 import { resolve, join } from 'node:path';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { AgentEngine } from '../core/engine.js';
@@ -75,7 +75,7 @@ async function main(): Promise<void> {
   }
 
   if (args[0] === 'version' || args[0] === '--version') {
-    console.log('ForceKit 2.0.0-alpha.1');
+    console.log(`ForceKit ${VERSION}`);
     process.exit(0);
   }
 

@@ -180,6 +180,42 @@ describe('ForceKitState', () => {
       assert.equal(snapshot.sessions.length, 1);
       assert.equal(snapshot.tasks.length, 1);
     });
+
+    it('should batch multiple updates and write to disk only once', () => {
+      const statePath = join(tempDir, '.forcekit', 'state.json');
+      assert.ok(!existsSync(statePath));
+
+      state.batch(() => {
+        state.addTask('Task A');
+        assert.ok(!existsSync(statePath));
+
+        state.addTask('Task B');
+        assert.ok(!existsSync(statePath));
+      });
+
+      assert.ok(existsSync(statePath));
+      const raw = readFileSync(statePath, 'utf-8');
+      const data = JSON.parse(raw);
+      assert.equal(data.tasks.length, 2);
+      assert.equal(data.tasks[0].description, 'Task A');
+      assert.equal(data.tasks[1].description, 'Task B');
+    });
+
+    it('should cache getSnapshot and invalidate it on mutations', () => {
+      const snap1 = state.getSnapshot();
+      const snap2 = state.getSnapshot();
+      // Should be identical reference
+      assert.equal(snap1, snap2);
+
+      state.addTask('New Task');
+      const snap3 = state.getSnapshot();
+      // Reference must change because of cache invalidation on mutation
+      assert.notEqual(snap1, snap3);
+
+      const snap4 = state.getSnapshot();
+      // Should be cached again
+      assert.equal(snap3, snap4);
+    });
   });
 
   describe('Markdown Rendering', () => {

@@ -18,6 +18,8 @@ context:
 tools:
   - lint
   - scan
+  - test
+  - verify
 
 constraints:
   maxFiles: 5

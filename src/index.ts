@@ -52,8 +52,11 @@ export type { TestResultSummary } from './tools/tester.js';
 export { createSessionTool } from './tools/session.js';
 
 // Search & Research
-export { createSearchTool } from './tools/search.js';
+export { createSearchTool, SearchEngine } from './tools/search.js';
 export type { SearchResultEntry, SearchSummary } from './tools/search.js';
+
+// Version
+export { VERSION } from './version.js';
 
 
 // Orchestration

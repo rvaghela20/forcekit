@@ -11,6 +11,17 @@ import type { ForceKitConfig } from '../config/defaults.js';
 
 const execAsync = promisify(child_process.exec);
 
+/**
+ * Sanitize a string for safe shell interpolation.
+ * Rejects values containing dangerous shell metacharacters.
+ */
+function sanitizeShellArg(value: string, paramName: string): string {
+  if (/[;|&`$(){}!\n\r]/.test(value)) {
+    throw new Error(`Invalid characters in '${paramName}': shell metacharacters are not allowed.`);
+  }
+  return value;
+}
+
 export interface TestResultSummary {
   success: boolean;
   totalTests: number;
@@ -44,13 +55,13 @@ export class Tester {
     let cmd = 'sf apex run test --code-coverage --result-format json';
 
     if (options.targetOrg) {
-      cmd += ` --target-org "${options.targetOrg}"`;
+      cmd += ` --target-org "${sanitizeShellArg(options.targetOrg, 'targetOrg')}"`;
     }
 
     if (options.tests && options.tests.length > 0) {
-      cmd += ` --class-names ${options.tests.map(t => `"${t}"`).join(' ')}`;
+      cmd += ` --class-names ${options.tests.map(t => `"${sanitizeShellArg(t, 'testClass')}"`).join(' ')}`;
     } else if (options.suite) {
-      cmd += ` --suite-names "${options.suite}"`;
+      cmd += ` --suite-names "${sanitizeShellArg(options.suite, 'suite')}"`;
     } else {
       cmd += ' --test-level RunLocalTests';
     }

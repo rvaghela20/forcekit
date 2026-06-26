@@ -3,9 +3,8 @@ version: "1.0"
 description: "Searches documentation and release notes for Salesforce platform changes and best practices"
 
 capabilities:
-  - doc_lookup
-  - web_search
-  - file_modification
+  - knowledge_research
+  - static_analysis
 
 context:
   required:
@@ -19,6 +18,7 @@ context:
 
 tools:
   - scan
+  - lint
   - web-search
 
 constraints:

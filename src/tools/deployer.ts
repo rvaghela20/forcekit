@@ -12,6 +12,17 @@ import type { ForceKitConfig } from '../config/defaults.js';
 
 const execAsync = promisify(child_process.exec);
 
+/**
+ * Sanitize a string for safe shell interpolation.
+ * Rejects values containing dangerous shell metacharacters.
+ */
+function sanitizeShellArg(value: string, paramName: string): string {
+  if (/[;|&`$(){}!\n\r]/.test(value)) {
+    throw new Error(`Invalid characters in '${paramName}': shell metacharacters are not allowed.`);
+  }
+  return value;
+}
+
 export class Deployer {
   private projectRoot: string;
 
@@ -30,13 +41,13 @@ export class Deployer {
     let cmd = 'sf project deploy start --json';
 
     if (options.targetOrg) {
-      cmd += ` --target-org "${options.targetOrg}"`;
+      cmd += ` --target-org "${sanitizeShellArg(options.targetOrg, 'targetOrg')}"`;
     }
     if (options.metadata) {
-      cmd += ` --metadata "${options.metadata}"`;
+      cmd += ` --metadata "${sanitizeShellArg(options.metadata, 'metadata')}"`;
     }
     if (options.sourceDirs && options.sourceDirs.length > 0) {
-      cmd += ` --source-dir ${options.sourceDirs.map(d => `"${d}"`).join(' ')}`;
+      cmd += ` --source-dir ${options.sourceDirs.map(d => `"${sanitizeShellArg(d, 'sourceDir')}"`).join(' ')}`;
     }
 
     try {
